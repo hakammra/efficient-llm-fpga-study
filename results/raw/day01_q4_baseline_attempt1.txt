@@ -1,0 +1,33 @@
+
+
+Loading model... 
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b10938-f1e44dcc1
+model      : .\.local\models\qwen2.5-0.5b-instruct-q4_k_m.gguf
+ftype      : Q4_K - Medium
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> Answer in one sentence: What is a multiply-accumulate operation?
+A multiply-accumulate operation is a mathematical operation that involves multiplying a series of values together and then adding the results to a running total. This operation is often used in signal processing and data analysis to compute the sum of a series of values, such as the sum of a series of values in a time series or the sum
+
+[ Prompt: 68.3 t/s | Generation: 26.7 t/s ]
+
+
+Exiting...
