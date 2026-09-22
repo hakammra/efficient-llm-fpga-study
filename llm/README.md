@@ -2,6 +2,8 @@
 
 Day 1 verifies that one official Qwen Q4_K_M GGUF can generate a response on CPU. The repeatable three-variant benchmark belongs to Day 2.
 
+For a command-by-command explanation and tested CMD/Git Bash equivalents, read [the Day 1 setup walkthrough](../docs/day01_setup_walkthrough.md).
+
 ## Windows baseline setup
 
 Run these commands in PowerShell from the repository root. `winget install llama.cpp` is the simple official option where WinGet exists. On the Day 1 machine it was absent, so the following pinned official CPU release was used instead.

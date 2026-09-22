@@ -15,6 +15,7 @@
 - Downloaded the official `llama.cpp` Windows x64 CPU release b10938 and ran `llama-cli --version`: build `b10938-f1e44dcc1`.
 - Downloaded the official Qwen Q4_K_M GGUF (491,400,032 bytes), verified its SHA256, and ran three short local CPU inference checks. The final one-word check returned `Paris` and exited with code 0.
 - Wrote introductory notes for tokens, tokenization, embeddings, transformers, attention, autoregressive inference, quantization, and FPGA arithmetic.
+- Added a [command-by-command Day 1 walkthrough](../docs/day01_setup_walkthrough.md) for Command Prompt and Git Bash. Verified `llama-cli --version`, model hash calculation, and the same inference command in both shells; both inference checks returned `Paris` with exit code 0.
 
 ## What I learned
 
@@ -36,6 +37,7 @@
 - `winget`, `gh`, `llama.cpp`, CMake, Icarus Verilog, and Yosys were not on `PATH` initially. WinGet was unavailable, so the pinned official CPU ZIP was used.
 - The GitHub `releases/latest` endpoint identified a package release without Windows binaries. The numbered b10938 release supplied the needed CPU binary.
 - Initial WMI queries for machine information were denied; CPU information came from the Windows registry and RAM from the .NET `ComputerInfo` API.
+- This Git Bash installation has no `sha256sum`; Windows `certutil.exe` calculated the expected SHA256 from both Command Prompt and Git Bash.
 - The first two prompts showed that a functional model can produce incomplete or incorrect content. The final baseline prompt was simplified to check the inference path.
 
 ## Decisions made

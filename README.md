@@ -60,6 +60,8 @@ Complete the benchmark on Days 2–3, the HDL simulation on Days 4–5, and inte
 
 From PowerShell in the repository root, follow [llm/README.md](llm/README.md). The downloaded release and GGUF belong in `.local/`, which Git ignores. No CUDA setup is needed.
 
+For an interview-ready explanation and CMD/Git Bash commands, follow the [Day 1 setup walkthrough](docs/day01_setup_walkthrough.md).
+
 ## Sources and licenses
 
 - [Qwen2.5-0.5B-Instruct-GGUF model repository](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF) (model license: Apache-2.0)
