@@ -1,0 +1,2 @@
+# Day 1 uses the Python standard library only.
+# Add matplotlib for the Day 3 analysis when that code is implemented.

@@ -1,0 +1,22 @@
+# Local executables, downloaded model weights, and caches
+.local/
+*.gguf
+*.bin
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Generated simulator and synthesis output
+*.vcd
+*.fst
+fpga/build/
+fpga/waveforms/*
+!fpga/waveforms/.gitkeep
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
