@@ -5,3 +5,5 @@
 The Day 2 Q4_K_M `math_01` pilot has a full CLI stdout transcript and a structured JSON record. Its whole-process time includes program startup and model loading. The CLI-reported prompt and generation rates are single-run observations. Neither this pilot nor the Day 1 checks are three-model benchmark results.
 
 The filename-tagged Day 2 pilot runs retain separate Q4_K_M records for `math_01` and `instruction_01`. The latter's exact check is false: the raw transcript shows that the model repeated `Qualification` instead of reversing it. Keep incorrect responses in the dataset; they are evidence for the accuracy comparison.
+
+The Q8_0 `instruction_01` pilot also failed its exact check, returning `Qualiitiation`. The planned batch runner writes separate files with a `day02_bench_` prefix. Pilot observations are not included in the batch comparison.
