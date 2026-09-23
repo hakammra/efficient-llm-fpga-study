@@ -1,2 +1,2 @@
-# Days 1–2 use the Python standard library only.
-# Add matplotlib for the Day 3 analysis when that code is implemented.
+# Current setup and benchmark scripts use the Python standard library only.
+# Add matplotlib when the analysis and plot code is implemented.

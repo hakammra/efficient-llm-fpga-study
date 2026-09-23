@@ -1,4 +1,4 @@
-"""Run every Day 2 prompt once for each of the three model variants."""
+"""Run every benchmark prompt once for each of the three model variants."""
 
 from config import MODELS
 from evaluation import load_prompts, validate_prompts

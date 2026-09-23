@@ -1,0 +1,23 @@
+{
+  "model": "Q4_K_M",
+  "model_size_bytes": 491400032,
+  "prompt_id": "instruction_01",
+  "category": "instruction_following",
+  "prompt": "Reverse the characters in the word Qualification. Preserve letter case. Reply with only the reversed word.",
+  "response": "Qualification",
+  "check": "exact",
+  "expected": "noitacifilauQ",
+  "correct": false,
+  "exit_code": 0,
+  "whole_process_seconds": 3.835,
+  "prompt_tokens_per_second": 71.9,
+  "generation_tokens_per_second": 36.1,
+  "threads": 4,
+  "gpu_layers": 0,
+  "context_tokens": 2048,
+  "max_new_tokens": 96,
+  "temperature": 0,
+  "seed": 42,
+  "run_number": 1,
+  "raw_stdout_file": "results\\raw\\pilot_q4_k_m_instruction_01_run01_stdout.txt"
+}

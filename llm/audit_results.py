@@ -1,4 +1,4 @@
-"""Check saved Day 2 runs against prompts, settings, and raw transcripts."""
+"""Check saved benchmark runs against prompts, settings, and raw transcripts."""
 
 import argparse
 import json
@@ -26,7 +26,7 @@ TIMING_PATTERN = re.compile(
 
 
 def audit_one(item, model_name, run_number):
-    tag = f"day02_bench_{model_name.lower()}_{item['id']}_run{run_number:02d}"
+    tag = f"benchmark_{model_name.lower()}_{item['id']}_run{run_number:02d}"
     record_path = ROOT / "results" / "raw" / f"{tag}_record.json"
     raw_path = ROOT / "results" / "raw" / f"{tag}_stdout.txt"
     errors = []

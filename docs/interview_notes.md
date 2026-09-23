@@ -1,3 +1,3 @@
-# Interview notes (planned for Day 6)
+# Interview notes (planned)
 
-Day 6 will add 30-second, 2-minute, and 5-minute explanations based on the measured Day 2 benchmark and later HDL simulation. The CPU measurements are documented in `results/README.md`; no HDL results exist yet.
+The final write-up will add 30-second, 2-minute, and 5-minute explanations based on the measured CPU benchmark and later HDL simulation. The CPU measurements are documented in `results/README.md`; no HDL results exist yet.

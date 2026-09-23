@@ -1,6 +1,6 @@
 # Efficient LLM Inference and FPGA MAC Accelerator Study
 
-Status: **Day 2 complete; Day 3 analysis next**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. This is a six-day learning and engineering study, not a complete LLM accelerator.
+Status: **Benchmark data collection complete; analysis and hardware study planned**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. This is an incremental learning and engineering study, not a complete LLM accelerator.
 
 ## 1. Project motivation
 
@@ -26,7 +26,7 @@ The CPU benchmark and HDL study are separate experiments connected by the arithm
 
 ## 4. LLM benchmark methodology
 
-Day 2 used the same prompt set, model family, backend, CPU-only configuration, thread count, context length, and generation settings for all three variants. Raw responses and structured measurements were retained. Objective questions have simple checkable answers; summaries are kept for manual review. This is an **exploratory quality and efficiency comparison**, not a rigorous model-intelligence evaluation. See [llm/README.md](llm/README.md) and [benchmarks/README.md](benchmarks/README.md).
+The benchmark used the same prompt set, model family, backend, CPU-only configuration, thread count, context length, and generation settings for all three variants. Raw responses and structured measurements were retained. Objective questions have simple checkable answers; summaries are kept for manual review. This is an **exploratory quality and efficiency comparison**, not a rigorous model-intelligence evaluation. See [llm/README.md](llm/README.md) and [benchmarks/README.md](benchmarks/README.md).
 
 ## 5. Quantization explanation
 
@@ -34,7 +34,7 @@ Quantization represents values using fewer bits, usually with a mapping between 
 
 ## 6. FPGA arithmetic experiment
 
-Days 4 and 5 will implement and self-check a signed INT8 MAC and four-lane dot product in SystemVerilog. Simulation will establish functional behavior. Synthesis, if available, will report generic logic statistics, not physical DE0-Nano utilization or measured clock speed. No FPGA board is available. See [fpga/README.md](fpga/README.md).
+The hardware study will implement and self-check a signed INT8 MAC and four-lane dot product in SystemVerilog. Simulation will establish functional behavior. Synthesis, if available, will report generic logic statistics, not physical DE0-Nano utilization or measured clock speed. No FPGA board is available. See [fpga/README.md](fpga/README.md).
 
 ## 7. Relationship between quantization and hardware acceleration
 
@@ -42,11 +42,11 @@ Many neural-network layers compute sums of products, `y = Σ(wᵢ × xᵢ)`. A M
 
 ## 8. Experimental setup
 
-Day 1 local environment (2026-09-23): Windows x64 (build 26200), Intel Core i7-8650U, 8 logical processors, 15.92 GiB physical RAM, Python 3.14.7, Git 2.55.0.windows.5. `winget` is unavailable here, so the baseline uses the official `llama.cpp` Windows x64 CPU release **b10938** (commit `f1e44dcc1`). Model files come from the [official Qwen GGUF repository](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/tree/main). Exact baseline command and verification are in [llm/README.md](llm/README.md).
+Test environment (recorded 2026-09-23): Windows x64 (build 26200), Intel Core i7-8650U, 8 logical processors, 15.92 GiB physical RAM, Python 3.14.7, Git 2.55.0.windows.5. `winget` is unavailable here, so the baseline uses the official `llama.cpp` Windows x64 CPU release **b10938** (commit `f1e44dcc1`). Model files come from the [official Qwen GGUF repository](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/tree/main). Exact baseline command and verification are in [llm/README.md](llm/README.md).
 
 ## 9. Results
 
-The Day 2 batch contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. Strict exact checks passed for FP16 9/17, Q8_0 8/17, and Q4_K_M 10/17; three summaries per variant await manual review. One-pass speed medians and file sizes are in [results/README.md](results/README.md). These are exploratory observations, not a stable performance or broad model-quality ranking. Day 1 smoke tests remain separate from this batch.
+The benchmark dataset contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. Strict exact checks passed for FP16 9/17, Q8_0 8/17, and Q4_K_M 10/17; three summaries per variant await manual review. One-pass speed medians and file sizes are in [results/README.md](results/README.md). These are exploratory observations, not a stable performance or broad model-quality ranking. Setup smoke tests remain separate from this batch.
 
 ## 10. Limitations
 
@@ -54,13 +54,13 @@ One machine, one timing pass per prompt/model pair, a small prompt set, and a sm
 
 ## 11. Future work
 
-Analyze the saved benchmark records and produce plots on Day 3, complete HDL simulation on Days 4–5, and finish integration and interview notes on Day 6. Additional numbered timing trials can be run if a stronger speed estimate is needed. See [PROGRESS.md](PROGRESS.md).
+Analyze the saved benchmark records and produce plots, then complete HDL simulation, integration, and interview notes. Additional numbered timing trials can be run if a stronger speed estimate is needed. See [PROGRESS.md](PROGRESS.md).
 
-## Reproducing the Day 1 baseline on Windows
+## Reproducing the baseline on Windows
 
 From PowerShell in the repository root, follow [llm/README.md](llm/README.md). The downloaded release and GGUF belong in `.local/`, which Git ignores. No CUDA setup is needed.
 
-For an interview-ready explanation and CMD/Git Bash commands, follow the [Day 1 setup walkthrough](docs/day01_setup_walkthrough.md).
+For an interview-ready explanation and CMD/Git Bash commands, follow the [setup walkthrough](docs/setup_walkthrough.md).
 
 ## Sources and licenses
 

@@ -1,4 +1,4 @@
-"""Run one saved CPU inference trial for the Day 2 benchmark."""
+"""Run one saved CPU inference trial for the quantization benchmark."""
 
 import json
 import re
@@ -26,7 +26,7 @@ def run_one(item, model_name, run_number):
     if run_number < 1:
         raise ValueError("run_number must be at least 1")
 
-    run_tag = f"day02_bench_{model_name.lower()}_{item['id']}_run{run_number:02d}"
+    run_tag = f"benchmark_{model_name.lower()}_{item['id']}_run{run_number:02d}"
     raw_path = ROOT / "results" / "raw" / f"{run_tag}_stdout.txt"
     record_path = ROOT / "results" / "raw" / f"{run_tag}_record.json"
 
