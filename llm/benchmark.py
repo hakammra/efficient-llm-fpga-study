@@ -1,4 +1,4 @@
-"""Day 2 benchmark entry point. Add the model/prompt loop in main()."""
+"""Run every Day 2 prompt once for each of the three model variants."""
 
 from config import MODELS
 from evaluation import load_prompts, validate_prompts
@@ -10,7 +10,9 @@ def main():
     validate_prompts(prompts)
     print(f"Validated {len(prompts)} prompts and {len(MODELS)} model variants.")
 
-    # Next hands-on step: loop over prompts and MODELS, calling run_one().
+    for item in prompts:
+        for model_name in MODELS:
+            run_one(item, model_name, 1)
 
 
 if __name__ == "__main__":

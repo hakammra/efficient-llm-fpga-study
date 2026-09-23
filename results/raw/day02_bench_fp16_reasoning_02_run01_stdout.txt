@@ -1,0 +1,33 @@
+
+
+Loading model... 
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b10938-f1e44dcc1
+model      : C:\Users\abdul\Documents\efficient-llm-fpga-study\.local\models\qwen2.5-0.5b-instruct-fp16.gguf
+ftype      : F16
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> In this puzzle, a person younger than 12 months is called a baby. Sam is 6 months old. Is Sam a baby? Reply with lowercase yes or no.
+yes
+
+[ Prompt: 116.3 t/s | Generation: 16.6 t/s ]
+
+
+Exiting...

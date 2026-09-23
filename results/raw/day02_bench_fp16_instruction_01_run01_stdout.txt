@@ -1,0 +1,33 @@
+
+
+Loading model... 
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b10938-f1e44dcc1
+model      : C:\Users\abdul\Documents\efficient-llm-fpga-study\.local\models\qwen2.5-0.5b-instruct-fp16.gguf
+ftype      : F16
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> Reverse the characters in the word Qualification. Preserve letter case. Reply with only the reversed word.
+Qualiitiation
+
+[ Prompt: 134.3 t/s | Generation: 15.8 t/s ]
+
+
+Exiting...

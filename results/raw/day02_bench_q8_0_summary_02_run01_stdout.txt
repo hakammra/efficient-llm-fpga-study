@@ -1,0 +1,33 @@
+
+
+Loading model... 
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b10938-f1e44dcc1
+model      : C:\Users\abdul\Documents\efficient-llm-fpga-study\.local\models\qwen2.5-0.5b-instruct-q8_0.gguf
+ftype      : Q8_0
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> Summarize this in one sentence: A microcontroller reads a temperature sensor once each minute. It turns on a fan when the temperature rises above 30 degrees Celsius and turns the fan off when the temperature falls below 28 degrees Celsius.
+A microcontroller monitors a temperature sensor, turning on a fan when the temperature exceeds 30 degrees Celsius and off when it falls below 28 degrees Celsius.
+
+[ Prompt: 106.2 t/s | Generation: 32.4 t/s ]
+
+
+Exiting...
