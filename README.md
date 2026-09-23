@@ -1,6 +1,6 @@
 # Efficient LLM Inference and FPGA MAC Accelerator Study
 
-Status: **Day 2 in progress**. The shared prompt set and three model files are ready; the comparative benchmark has not yet run. This is a six-day learning and engineering study, not a complete LLM accelerator.
+Status: **Day 2 complete; Day 3 analysis next**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. This is a six-day learning and engineering study, not a complete LLM accelerator.
 
 ## 1. Project motivation
 
@@ -26,7 +26,7 @@ The CPU benchmark and HDL study are separate experiments connected by the arithm
 
 ## 4. LLM benchmark methodology
 
-Day 2 will use the same prompt set, model family, backend, CPU-only configuration, thread count, context length, and generation settings for all three variants. Raw responses and structured measurements will be retained. Objective questions will have simple checkable answers; other responses will be kept for manual review. This will be an **exploratory quality and efficiency comparison**, not a rigorous model-intelligence evaluation. See [llm/README.md](llm/README.md) and [benchmarks/README.md](benchmarks/README.md).
+Day 2 used the same prompt set, model family, backend, CPU-only configuration, thread count, context length, and generation settings for all three variants. Raw responses and structured measurements were retained. Objective questions have simple checkable answers; summaries are kept for manual review. This is an **exploratory quality and efficiency comparison**, not a rigorous model-intelligence evaluation. See [llm/README.md](llm/README.md) and [benchmarks/README.md](benchmarks/README.md).
 
 ## 5. Quantization explanation
 
@@ -46,15 +46,15 @@ Day 1 local environment (2026-09-23): Windows x64 (build 26200), Intel Core i7-8
 
 ## 9. Results
 
-No three-format benchmark results yet. Day 1's Q4_K_M functional check returned `Paris` to a one-word capital question. An earlier arithmetic prompt returned an incorrect answer; both raw outputs are retained under `results/raw/`. These are smoke tests, not comparative accuracy or speed measurements. Measured CPU findings will appear under `results/`; simulated HDL findings will be recorded separately.
+The Day 2 batch contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. Strict exact checks passed for FP16 9/17, Q8_0 8/17, and Q4_K_M 10/17; three summaries per variant await manual review. One-pass speed medians and file sizes are in [results/README.md](results/README.md). These are exploratory observations, not a stable performance or broad model-quality ranking. Day 1 smoke tests remain separate from this batch.
 
 ## 10. Limitations
 
-One machine, a small prompt set, and a small 0.5B-parameter model limit generalization. CPU timings can vary with system load and caching. Functional simulation does not establish FPGA timing, energy use, or physical resource use. No physical FPGA result will be claimed.
+One machine, one timing pass per prompt/model pair, a small prompt set, and a small 0.5B-parameter model limit generalization. Strict exact checks include formatting requirements, and CPU timings can vary with system load and caching. Whole-process duration includes model loading; separate loading time, peak process RAM, time to first token, and model-only inference latency were not measured reliably. Functional simulation will not establish FPGA timing, energy use, or physical resource use. No physical FPGA result will be claimed.
 
 ## 11. Future work
 
-Complete the benchmark on Days 2–3, the HDL simulation on Days 4–5, and integration and interview notes on Day 6. See [PROGRESS.md](PROGRESS.md).
+Analyze the saved benchmark records and produce plots on Day 3, complete HDL simulation on Days 4–5, and finish integration and interview notes on Day 6. Additional numbered timing trials can be run if a stronger speed estimate is needed. See [PROGRESS.md](PROGRESS.md).
 
 ## Reproducing the Day 1 baseline on Windows
 

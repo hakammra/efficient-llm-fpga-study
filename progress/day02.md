@@ -1,4 +1,4 @@
-# Day 2 — in progress
+# Day 2 — complete
 
 ## Goals
 
@@ -17,6 +17,7 @@
 - Added model, prompt ID, and run number to the output filenames. Ran `math_01` and `instruction_01` with Q4_K_M using the same settings, preserving each raw transcript and JSON record.
 - Ran the same `instruction_01` pilot with Q8_0, then extracted the one-run logic into `llm/runner.py`.
 - Added the prompt/model loop and completed one run for each of the 20 prompts with all three variants: 60 inference runs and 60 raw transcripts. Added `llm/audit_results.py` to check the saved records against the prompt file, settings, model paths, and transcripts.
+- Audited all 60 records with zero issues, documented measured metrics and their limits, and updated the repository overview for the Day 3 handoff.
 
 ## What I learned
 
@@ -30,6 +31,8 @@
 - Q8_0 GGUF: 675,710,816 bytes; SHA256 `ca59ca7f13d0e15a8cfa77bd17e65d24f6844b554a7b6c12e07a5f89ff76844e`.
 - Q4_K_M GGUF was verified on Day 1. These are file properties, not inference performance results.
 - The first full pass completed 60/60 prompt/model pairs with exit code 0, parsed token rates, matching raw responses, and llama.cpp build `b10938-f1e44dcc1`. The audit found zero missing pairs or mismatches. Strict exact checks passed for FP16 9/17, Q8_0 8/17, and Q4_K_M 10/17; three summaries per model remain for manual review. See `results/README.md` for descriptive timing medians.
+- The machine ran Windows 11 (build 26200) on an Intel Core i7-8650U with 15.92 GiB physical RAM and 8 logical processors. The benchmark requested four CPU threads and zero GPU layers for every run.
+- Model file size, prompt rate, generation rate, and whole-process duration were captured. Separate model loading time, peak process RAM, time to first token, and model-only inference latency were not reliably measured by this harness; no values are reported for them.
 - The single Q4_K_M `math_01` pilot record reports response `42`, exact check `true`, exit code 0, whole-process time 4.759 s, prompt rate 76.3 tokens/s, and generation rate 24.3 tokens/s. These are one-run observations from `results/raw/day02_q4_math_01_record.json`, not comparative statistics. Earlier manual runs of the same pilot reported whole-process times 2.476 s and 5.283 s, illustrating run-to-run variation.
 - The latest saved filename-tagged Q4_K_M `math_01` run returned `42` (exact check `true`) in 2.937 s. The `instruction_01` run returned `Qualification` unchanged (exact check `false`; expected `noitacifilauQ`) in 3.835 s. The raw transcript confirms the model response, so the failure is retained as measured behavior rather than changing the answer key. These remain individual pilot runs, not a three-variant comparison.
 - The Q8_0 `instruction_01` pilot returned `Qualiitiation` (exact check `false`) in 4.820 s. Its raw transcript confirms the response. Two failed pilots on one prompt do not establish a model-quality or speed ranking.
@@ -49,6 +52,5 @@
 
 ## Next steps
 
-- Have the user run additional numbered trials to estimate timing variation, then audit the complete set.
-- Review the nine saved summaries with an explicit faithfulness/coverage rubric; keep them separate from strict exact-check totals.
-- Record machine details and run-order limits, then produce summary tables and plots from saved measurements.
+- Day 3: process the saved records, review summaries with a stated rubric, and generate plots from measured files.
+- If a stronger timing estimate is needed, run additional numbered trials and audit them before calculating variation; the first pass remains valid as the Day 2 baseline.

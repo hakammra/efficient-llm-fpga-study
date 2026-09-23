@@ -21,3 +21,5 @@ The user ran all 20 prompts once per variant on CPU with four threads, zero GPU 
 These are descriptive medians from one run per prompt/model pair. Whole-process time includes program startup and model loading, while the CLI rates describe the prompt and generation phases. Output length and task type vary across prompts. Strict exact checking includes requested formatting; for example, all variants answered `Ohm` where the prompt requested lowercase `ohm`. The nine summaries are saved for manual review and have no accuracy score yet. Repeated trials are needed before making stable speed claims.
 
 The machine's CPU is an Intel Core i7-8650U. The loop ran FP16, then Q8_0, then Q4_K_M for each prompt; this fixed order may affect timing. The files report model sizes on disk, not measured peak RAM use.
+
+Separate model loading time, peak process RAM, time to first token, and model-only inference latency were not reliably captured. No values are inferred for those metrics from the whole-process duration or the printed token rates.
