@@ -1,0 +1,142 @@
+[
+  {
+    "id": "math_01",
+    "category": "mathematics",
+    "prompt": "Calculate 17 + 25. Reply with only the integer.",
+    "check": "exact",
+    "expected": "42"
+  },
+  {
+    "id": "instruction_01",
+    "category": "instruction_following",
+    "prompt": "Reverse the characters in the word Qualification. Preserve letter case. Reply with only the reversed word.",
+    "check": "exact",
+    "expected": "noitacifilauQ"
+  },
+  {
+    "id": "summary_01",
+    "category": "summarization",
+    "prompt": "Summarize this in one sentence: A fall-detection wearable sends an alert when it detects a possible fall. Its designers aim to reduce false alarms while keeping the device compact and extending battery life.",
+    "check": "manual",
+    "expected": null
+  },
+  {
+    "id": "reasoning_01",
+    "category": "basic_reasoning",
+    "prompt": "All Zorbs are robots. Ava is a Zorb. Is Ava a robot? Reply with lowercase yes or no.",
+    "check": "exact",
+    "expected": "yes"
+  },
+  {
+    "id": "programming_01",
+    "category": "programming",
+    "prompt": "What does this Python code print? print(3 * (2 + 4)). Reply with only the integer.",
+    "check": "exact",
+    "expected": "18"
+  },
+  {
+    "id": "factual_01",
+    "category": "factual",
+    "prompt": "What is the chemical symbol for gold? Reply with only the symbol.",
+    "check": "exact",
+    "expected": "Au"
+  },
+  {
+    "id": "math_02",
+    "category": "mathematics",
+    "prompt": "Calculate 5*25. Reply with only the integer.",
+    "check": "exact",
+    "expected": "125"
+  },
+  {
+    "id": "reasoning_02",
+    "category": "basic_reasoning",
+    "prompt": "In this puzzle, a person younger than 12 months is called a baby. Sam is 6 months old. Is Sam a baby? Reply with lowercase yes or no.",
+    "check": "exact",
+    "expected": "yes"
+  },
+  {
+    "id": "math_03",
+    "category": "mathematics",
+    "prompt": "What is the remainder when 13 is divided by 4? Reply with only the integer.",
+    "check": "exact",
+    "expected": "1"
+  },
+  {
+    "id": "programming_02",
+    "category": "programming",
+    "prompt": "What does this Python code print? print(5>10). Reply with True or False.",
+    "check": "exact",
+    "expected": "False"
+  },
+  {
+    "id": "reasoning_03",
+    "category": "basic_reasoning",
+    "prompt": "In this puzzle, a person is called tall if their height is at least 6 feet. Umar is 5 feet tall. Is Umar tall? Reply with lowercase yes or no.",
+    "check": "exact",
+    "expected": "no"
+  },
+  {
+    "id": "math_04",
+    "category": "mathematics",
+    "prompt": "Find the value of 100-1. Reply with only the integer.",
+    "check": "exact",
+    "expected": "99"
+  },
+  {
+    "id": "reasoning_04",
+    "category": "basic_reasoning",
+    "prompt": "All Nars are Vels. All Nars can swim. Does it logically follow that all Vels can swim? Reply with lowercase yes or no.",
+    "check": "exact",
+    "expected": "no"
+  },
+  {
+    "id": "programming_03",
+    "category": "programming",
+    "prompt": "What does this Python code print? print(len([10, 20, 30])). Reply with only the integer.",
+    "check": "exact",
+    "expected": "3"
+  },
+  {
+    "id": "instruction_02",
+    "category": "instruction_following",
+    "prompt": "Write the words cat and dog in that order, separated by one comma with no spaces. Do not add anything else.",
+    "check": "exact",
+    "expected": "cat,dog"
+  },
+  {
+    "id": "instruction_03",
+    "category": "instruction_following",
+    "prompt": "Convert the word FPGA to lowercase. Reply with only the converted word.",
+    "check": "exact",
+    "expected": "fpga"
+  },
+  {
+    "id": "factual_02",
+    "category": "factual",
+    "prompt": "Which planet is known as the Red Planet? Reply with only its name.",
+    "check": "exact",
+    "expected": "Mars"
+  },
+  {
+    "id": "factual_03",
+    "category": "factual",
+    "prompt": "What is the SI unit of electrical resistance? Reply with only the unit name in lowercase.",
+    "check": "exact",
+    "expected": "ohm"
+  },
+  {
+    "id": "summary_02",
+    "category": "summarization",
+    "prompt": "Summarize this in one sentence: A microcontroller reads a temperature sensor once each minute. It turns on a fan when the temperature rises above 30 degrees Celsius and turns the fan off when the temperature falls below 28 degrees Celsius.",
+    "check": "manual",
+    "expected": null
+  },
+  {
+    "id": "summary_03",
+    "category": "summarization",
+    "prompt": "Summarize this in one sentence: A student compared three precision variants of the same small language model on one CPU. The student recorded each model's file size, execution settings, and responses to the same questions so the comparison could be inspected later.",
+    "check": "manual",
+    "expected": null
+  }
+]

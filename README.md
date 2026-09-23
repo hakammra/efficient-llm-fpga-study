@@ -1,6 +1,6 @@
 # Efficient LLM Inference and FPGA MAC Accelerator Study
 
-Status: **Day 1 complete**. This is a six-day learning and engineering study, not a complete LLM accelerator.
+Status: **Day 2 in progress**. The shared prompt set and three model files are ready; the comparative benchmark has not yet run. This is a six-day learning and engineering study, not a complete LLM accelerator.
 
 ## 1. Project motivation
 
