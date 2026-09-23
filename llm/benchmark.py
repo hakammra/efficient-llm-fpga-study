@@ -11,11 +11,19 @@ from evaluation import load_prompts, validate_prompts, check_response
 
 prompts = load_prompts()
 validate_prompts(prompts)
-item = prompts[0]
+item = prompts[1]
+
+model_name = "Q4_K_M"
+run_number = 1
+run_tag = f"day02_{model_name.lower()}_{item['id']}_run{run_number:02d}"
+raw_path = ROOT / "results" / "raw" / f"{run_tag}_stdout.txt"
+record_path = ROOT / "results" / "raw" / f"{run_tag}_record.json"
+if raw_path.exists() or record_path.exists():
+    raise FileExistsError(f"Run files already exist for {run_tag}; increase run_number")
 
 command = [
     str(LLAMA_CLI),
-    "-m", str(MODELS["Q4_K_M"]),
+    "-m", str(MODELS[model_name]),
     "-p", item["prompt"],
     "-n", str(MAX_NEW_TOKENS),
     "-t", str(THREADS),
@@ -43,7 +51,6 @@ elapsed = time.perf_counter() - start
 print("Prompt:", item["id"])
 print("Exit code:", result.returncode)
 print("Whole-process time (s):", round(elapsed, 3))
-raw_path = ROOT / "results" / "raw" / "day02_q4_math_01_stdout.txt"
 raw_path.write_text(result.stdout, encoding="utf-8")
 
 text = result.stdout.replace("\r\n", "\n")
@@ -70,8 +77,8 @@ else:
     generation_tps = float(timing.group(2))
 
 record = {
-    "model": "Q4_K_M",
-    "model_size_bytes": MODELS["Q4_K_M"].stat().st_size,
+    "model": model_name,
+    "model_size_bytes": MODELS[model_name].stat().st_size,
     "prompt_id": item["id"],
     "category": item["category"],
     "prompt": item["prompt"],
@@ -89,10 +96,10 @@ record = {
     "max_new_tokens": MAX_NEW_TOKENS,
     "temperature": TEMPERATURE,
     "seed": SEED,
+    "run_number": run_number,
     "raw_stdout_file": str(raw_path.relative_to(ROOT)),
 }
 
-record_path = ROOT / "results" / "raw" / "day02_q4_math_01_record.json"
 record_path.write_text(
     json.dumps(record, indent=2) + "\n",
     encoding="utf-8",

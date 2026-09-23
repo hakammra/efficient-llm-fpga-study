@@ -42,4 +42,4 @@ python llm\evaluation.py
 
 `config.py` checks the local executable, prompt file, and three model paths. `evaluation.py` loads the shared JSON, validates its fields and unique IDs, and demonstrates exact-answer checking. The exact check strips outer whitespace only; manual-summary tasks return `None` and require the full response to be saved. These commands validate preparation, not model performance.
 
-`benchmark.py` is currently a **one-prompt Q4_K_M pilot**. It saves stdout and a JSON record for `math_01`. It is intentionally not the full three-model benchmark yet; its fixed output filenames must be generalized before looping over prompts.
+`benchmark.py` is currently a **one-prompt-at-a-time pilot**. It saves stdout and a JSON record using the selected model, prompt ID, and run number in the filename. The `item = prompts[index]` and `model_name` assignments are changed manually for pilot runs; the script does not yet loop over all prompts and models. Reusing the same run number for the same model and prompt raises `FileExistsError` to protect the saved outputs.
