@@ -12,6 +12,7 @@
 - Created and reviewed a 20-prompt JSON dataset: 4 mathematics, 4 basic reasoning, 3 programming, 3 instruction following, 3 factual, and 3 summarization prompts.
 - Tightened three reasoning questions to make their rules explicit and avoid reliance on outside facts. Marked summaries for manual review instead of assigning invented accuracy scores.
 - Validated JSON syntax, required fields, check types, unique IDs, category counts, and the reverse-string answer key.
+- Added `llm/config.py` for shared model paths and runtime settings, and `llm/evaluation.py` to load prompts, validate entries, and check exact answers while leaving summaries for manual review.
 
 ## What I learned
 

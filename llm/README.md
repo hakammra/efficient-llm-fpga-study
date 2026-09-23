@@ -30,3 +30,14 @@ The [official Qwen file page](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-
 The Day 1 run returned `Paris` and exited successfully. Two earlier raw runs are also retained: the first answer hit its 64-token cap, and the second returned `15` for `5 + 2 * 3` (correct value `11`). This small model's mistake is a useful reason to use objective checks in the later comparison. `llama.cpp` displayed prompt and generation rates during these runs, but they are not treated as comparable benchmark findings.
 
 On Day 2, the harness will use identical prompt text and generation settings for FP16, Q8_0, and Q4_K_M, record full responses, and explicitly capture available performance metrics. It will also record backend version, model hashes, machine details, and run order.
+
+## Day 2 preparation checks
+
+From the repository root in Command Prompt:
+
+```bat
+python llm\config.py
+python llm\evaluation.py
+```
+
+`config.py` checks the local executable, prompt file, and three model paths. `evaluation.py` loads the shared JSON, validates its fields and unique IDs, and demonstrates exact-answer checking. The exact check strips outer whitespace only; manual-summary tasks return `None` and require the full response to be saved. These commands validate preparation, not model performance. The benchmark runner is still pending.
