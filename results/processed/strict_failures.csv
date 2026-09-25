@@ -1,0 +1,25 @@
+model,prompt_id,run_number,expected,response,raw_stdout_file
+FP16,instruction_01,1,noitacifilauQ,Qualiitiation,results\raw\benchmark_fp16_instruction_01_run01_stdout.txt
+Q8_0,instruction_01,1,noitacifilauQ,Qualiitiation,results\raw\benchmark_q8_0_instruction_01_run01_stdout.txt
+Q4_K_M,instruction_01,1,noitacifilauQ,Qualification,results\raw\benchmark_q4_k_m_instruction_01_run01_stdout.txt
+Q8_0,reasoning_01,1,yes,Yes.,results\raw\benchmark_q8_0_reasoning_01_run01_stdout.txt
+FP16,programming_01,1,18,14,results\raw\benchmark_fp16_programming_01_run01_stdout.txt
+Q8_0,programming_01,1,18,14,results\raw\benchmark_q8_0_programming_01_run01_stdout.txt
+Q4_K_M,programming_01,1,18,14,results\raw\benchmark_q4_k_m_programming_01_run01_stdout.txt
+FP16,math_03,1,1,3,results\raw\benchmark_fp16_math_03_run01_stdout.txt
+Q8_0,math_03,1,1,3,results\raw\benchmark_q8_0_math_03_run01_stdout.txt
+Q4_K_M,math_03,1,1,3,results\raw\benchmark_q4_k_m_math_03_run01_stdout.txt
+FP16,programming_02,1,False,The Python code `print(5>10)` will print `False`.,results\raw\benchmark_fp16_programming_02_run01_stdout.txt
+Q8_0,programming_02,1,False,The Python code `print(5>10)` will print `False`.,results\raw\benchmark_q8_0_programming_02_run01_stdout.txt
+FP16,reasoning_03,1,no,yes,results\raw\benchmark_fp16_reasoning_03_run01_stdout.txt
+Q8_0,reasoning_03,1,no,yes,results\raw\benchmark_q8_0_reasoning_03_run01_stdout.txt
+Q4_K_M,reasoning_03,1,no,yes,results\raw\benchmark_q4_k_m_reasoning_03_run01_stdout.txt
+FP16,reasoning_04,1,no,yes,results\raw\benchmark_fp16_reasoning_04_run01_stdout.txt
+Q8_0,reasoning_04,1,no,yes,results\raw\benchmark_q8_0_reasoning_04_run01_stdout.txt
+Q4_K_M,reasoning_04,1,no,yes,results\raw\benchmark_q4_k_m_reasoning_04_run01_stdout.txt
+FP16,instruction_02,1,"cat,dog","cat, dog",results\raw\benchmark_fp16_instruction_02_run01_stdout.txt
+Q8_0,instruction_02,1,"cat,dog","cat, dog",results\raw\benchmark_q8_0_instruction_02_run01_stdout.txt
+Q4_K_M,instruction_02,1,"cat,dog","cat, dog",results\raw\benchmark_q4_k_m_instruction_02_run01_stdout.txt
+FP16,factual_03,1,ohm,Ohm,results\raw\benchmark_fp16_factual_03_run01_stdout.txt
+Q8_0,factual_03,1,ohm,Ohm,results\raw\benchmark_q8_0_factual_03_run01_stdout.txt
+Q4_K_M,factual_03,1,ohm,Ohm,results\raw\benchmark_q4_k_m_factual_03_run01_stdout.txt

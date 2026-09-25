@@ -1,0 +1,51 @@
+{
+  "source": "results/raw/benchmark_*_record.json and paired transcripts",
+  "llama_build": "b10938-f1e44dcc1",
+  "runs_per_prompt_model": 1,
+  "prompt_count": 20,
+  "record_count": 60,
+  "notes": [
+    "Strict exact checks include formatting requirements.",
+    "Manual summaries are unscored.",
+    "Whole-process time includes startup and model loading.",
+    "Peak RAM, load time, and time to first token were not measured."
+  ],
+  "models": [
+    {
+      "model": "FP16",
+      "model_size_bytes": 1266425696,
+      "model_size_mib": 1207.76,
+      "record_count": 20,
+      "exact_passes": 9,
+      "exact_checks": 17,
+      "manual_reviews": 3,
+      "median_whole_process_seconds": 4.798,
+      "median_prompt_tokens_per_second": 134.9,
+      "median_generation_tokens_per_second": 16.3
+    },
+    {
+      "model": "Q8_0",
+      "model_size_bytes": 675710816,
+      "model_size_mib": 644.41,
+      "record_count": 20,
+      "exact_passes": 8,
+      "exact_checks": 17,
+      "manual_reviews": 3,
+      "median_whole_process_seconds": 4.167,
+      "median_prompt_tokens_per_second": 98.95,
+      "median_generation_tokens_per_second": 31.95
+    },
+    {
+      "model": "Q4_K_M",
+      "model_size_bytes": 491400032,
+      "model_size_mib": 468.64,
+      "record_count": 20,
+      "exact_passes": 10,
+      "exact_checks": 17,
+      "manual_reviews": 3,
+      "median_whole_process_seconds": 4.216,
+      "median_prompt_tokens_per_second": 81.95,
+      "median_generation_tokens_per_second": 34.25
+    }
+  ]
+}

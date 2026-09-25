@@ -1,6 +1,6 @@
 # Results
 
-`raw/` holds direct outputs and per-run records; `processed/` will hold derived summaries. Keep units, runtime settings, and provenance next to measurements. Plots will be generated from measured files. The setup phase contains only Q4_K_M smoke-test outputs, not a comparison. `baseline_q4.txt` is the final one-word check. `baseline_q4_attempt1.txt` hit its output cap; `baseline_q4_attempt2.txt` contains an incorrect arithmetic answer. They are preserved to make the exploratory process visible.
+`raw/` holds direct outputs and per-run records; `processed/` holds derived summaries, exact-check failures, and responses for manual review. `analysis/analyze_results.py` generates these files and the plot from the measured batch. Keep units, runtime settings, and provenance next to measurements. The setup phase contains only Q4_K_M smoke-test outputs, not a comparison. `baseline_q4.txt` is the final one-word check. `baseline_q4_attempt1.txt` hit its output cap; `baseline_q4_attempt2.txt` contains an incorrect arithmetic answer. They are preserved to make the exploratory process visible.
 
 The initial Q4_K_M `math_01` pilot has a full CLI stdout transcript and a structured JSON record. Its whole-process time includes program startup and model loading. The CLI-reported prompt and generation rates are single-run observations. Neither this pilot nor the setup checks are three-model benchmark results.
 
@@ -23,3 +23,7 @@ These are descriptive medians from one run per prompt/model pair. Whole-process 
 The machine's CPU is an Intel Core i7-8650U. The loop ran FP16, then Q8_0, then Q4_K_M for each prompt; this fixed order may affect timing. The files report model sizes on disk, not measured peak RAM use.
 
 Separate model loading time, peak process RAM, time to first token, and model-only inference latency were not reliably captured. No values are inferred for those metrics from the whole-process duration or the printed token rates.
+
+## Processed outputs
+
+Run `.venv\Scripts\python.exe analysis\analyze_results.py` from the repository root to regenerate `processed/benchmark_summary.csv`, `processed/benchmark_summary.json`, `processed/strict_failures.csv`, `processed/manual_review.md`, and `analysis/plots/benchmark_tradeoffs.png`. The script checks each record against its prompt and raw transcript before calculating results. It can regenerate outputs without local GGUF files. Follow [the analysis guide](../analysis/README.md) for Command Prompt setup and interpretation.

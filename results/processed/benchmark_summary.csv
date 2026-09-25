@@ -1,0 +1,4 @@
+model,model_size_bytes,model_size_mib,record_count,exact_passes,exact_checks,manual_reviews,median_whole_process_seconds,median_prompt_tokens_per_second,median_generation_tokens_per_second
+FP16,1266425696,1207.76,20,9,17,3,4.798,134.9,16.3
+Q8_0,675710816,644.41,20,8,17,3,4.167,98.95,31.95
+Q4_K_M,491400032,468.64,20,10,17,3,4.216,81.95,34.25

@@ -1,6 +1,6 @@
 # Efficient LLM Inference and FPGA MAC Accelerator Study
 
-Status: **Benchmark data collection complete; analysis and hardware study planned**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. This is an incremental learning and engineering study, not a complete LLM accelerator.
+Status: **Benchmark and comparative analysis complete; MAC RTL and testbench written, simulation pending**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. This is an incremental learning and engineering study, not a complete LLM accelerator.
 
 ## 1. Project motivation
 
@@ -34,7 +34,7 @@ Quantization represents values using fewer bits, usually with a mapping between 
 
 ## 6. FPGA arithmetic experiment
 
-The hardware study will implement and self-check a signed INT8 MAC and four-lane dot product in SystemVerilog. Simulation will establish functional behavior. Synthesis, if available, will report generic logic statistics, not physical DE0-Nano utilization or measured clock speed. No FPGA board is available. See [fpga/README.md](fpga/README.md).
+The hardware study has a signed INT8 MAC and self-checking SystemVerilog testbench. Windows Device Guard currently prevents the installed simulator from running, so functional verification remains pending. A four-lane dot product is planned next. Simulation can establish functional behavior once run; synthesis, if available, will report generic logic statistics, not physical DE0-Nano utilization or measured clock speed. No FPGA board is available. See [fpga/README.md](fpga/README.md).
 
 ## 7. Relationship between quantization and hardware acceleration
 
@@ -46,15 +46,15 @@ Test environment (recorded 2026-09-23): Windows x64 (build 26200), Intel Core i7
 
 ## 9. Results
 
-The benchmark dataset contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. Strict exact checks passed for FP16 9/17, Q8_0 8/17, and Q4_K_M 10/17; three summaries per variant await manual review. One-pass speed medians and file sizes are in [results/README.md](results/README.md). These are exploratory observations, not a stable performance or broad model-quality ranking. Setup smoke tests remain separate from this batch.
+The benchmark dataset contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. Strict exact checks passed for FP16 9/17, Q8_0 8/17, and Q4_K_M 10/17; three summaries per variant await manual review. [The analysis script](analysis/analyze_results.py) generates [processed tables](results/processed/benchmark_summary.csv) and a [comparison figure](analysis/plots/benchmark_tradeoffs.png) from those records. These are exploratory observations, not a stable performance or broad model-quality ranking. Setup smoke tests remain separate from this batch.
 
 ## 10. Limitations
 
-One machine, one timing pass per prompt/model pair, a small prompt set, and a small 0.5B-parameter model limit generalization. Strict exact checks include formatting requirements, and CPU timings can vary with system load and caching. Whole-process duration includes model loading; separate loading time, peak process RAM, time to first token, and model-only inference latency were not measured reliably. Functional simulation will not establish FPGA timing, energy use, or physical resource use. No physical FPGA result will be claimed.
+One machine, one timing pass per prompt/model pair, a small prompt set, and a small 0.5B-parameter model limit generalization. Strict exact checks include formatting requirements, and CPU timings can vary with system load and caching. Whole-process duration includes model loading; separate loading time, peak process RAM, time to first token, and model-only inference latency were not measured reliably. The MAC has not yet passed an HDL simulation on this machine because Device Guard blocks the installed Icarus executable. Future functional simulation will not establish FPGA timing, energy use, or physical resource use. No physical FPGA result is claimed.
 
 ## 11. Future work
 
-Analyze the saved benchmark records and produce plots, then complete HDL simulation, integration, and interview notes. Additional numbered timing trials can be run if a stronger speed estimate is needed. See [PROGRESS.md](PROGRESS.md).
+Run the MAC testbench with an approved simulator, then implement the parallel dot product, integration, and interview notes. Additional numbered timing trials can be run if a stronger speed estimate is needed. See [PROGRESS.md](PROGRESS.md).
 
 ## Reproducing the baseline on Windows
 

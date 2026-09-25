@@ -4,7 +4,7 @@ import argparse
 import json
 import re
 import statistics
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 from config import (
     CONTEXT_TOKENS,
@@ -25,7 +25,7 @@ TIMING_PATTERN = re.compile(
 )
 
 
-def audit_one(item, model_name, run_number):
+def audit_one(item, model_name, run_number, verify_model_file=True):
     tag = f"benchmark_{model_name.lower()}_{item['id']}_run{run_number:02d}"
     record_path = ROOT / "results" / "raw" / f"{tag}_record.json"
     raw_path = ROOT / "results" / "raw" / f"{tag}_stdout.txt"
@@ -41,7 +41,6 @@ def audit_one(item, model_name, run_number):
 
     expected_fields = {
         "model": model_name,
-        "model_size_bytes": MODELS[model_name].stat().st_size,
         "prompt_id": item["id"],
         "category": item["category"],
         "prompt": item["prompt"],
@@ -54,12 +53,18 @@ def audit_one(item, model_name, run_number):
         "temperature": TEMPERATURE,
         "seed": SEED,
         "run_number": run_number,
-        "raw_stdout_file": str(raw_path.relative_to(ROOT)),
         "exit_code": 0,
     }
+    if verify_model_file:
+        expected_fields["model_size_bytes"] = MODELS[model_name].stat().st_size
+    elif not isinstance(record.get("model_size_bytes"), int) or record["model_size_bytes"] <= 0:
+        errors.append(f"{tag}: invalid recorded model size")
     for key, expected in expected_fields.items():
         if record.get(key) != expected:
             errors.append(f"{tag}: {key} mismatch")
+    recorded_raw = record.get("raw_stdout_file")
+    if not isinstance(recorded_raw, str) or PureWindowsPath(recorded_raw).as_posix() != raw_path.relative_to(ROOT).as_posix():
+        errors.append(f"{tag}: raw_stdout_file mismatch")
 
     marker = f"> {item['prompt']}\n"
     if marker not in raw or "\n[ Prompt:" not in raw.split(marker, 1)[-1]:
@@ -85,8 +90,12 @@ def audit_one(item, model_name, run_number):
     if build is None or record.get("llama_build") != build.group(1):
         errors.append(f"{tag}: llama build mismatch")
     model_line = re.search(r"^model\s*:\s*(.+)$", raw, re.MULTILINE)
-    if model_line is None or Path(model_line.group(1).strip()) != MODELS[model_name]:
+    if model_line is None:
         errors.append(f"{tag}: loaded model path mismatch")
+    elif verify_model_file and Path(model_line.group(1).strip()) != MODELS[model_name]:
+        errors.append(f"{tag}: loaded model path mismatch")
+    elif not verify_model_file and PureWindowsPath(model_line.group(1).strip()).name != MODELS[model_name].name:
+        errors.append(f"{tag}: loaded model filename mismatch")
     if record.get("stderr"):
         errors.append(f"{tag}: nonempty stderr")
     if not isinstance(record.get("whole_process_seconds"), (int, float)) or record["whole_process_seconds"] <= 0:

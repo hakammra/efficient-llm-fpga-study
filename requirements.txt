@@ -1,2 +1,1 @@
-# Current setup and benchmark scripts use the Python standard library only.
-# Add matplotlib when the analysis and plot code is implemented.
+matplotlib==3.11.2

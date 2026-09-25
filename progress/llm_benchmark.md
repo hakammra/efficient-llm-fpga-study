@@ -50,7 +50,7 @@
 - Keep exact answers as strings and subjective summaries as `expected: null` with `check: "manual"`.
 - Keep GGUF files in ignored `.local/models/`; commit the prompt set, scripts, documentation, and measured raw outputs, but not model weights.
 
-## Next steps
+## Follow-up
 
-- Process the saved records, review summaries with a stated rubric, and generate plots from measured files.
+- The saved records were processed and plotted in the comparative analysis milestone. Summary responses remain available for manual review.
 - If a stronger timing estimate is needed, run additional numbered trials and audit them before calculating variation; the first pass remains the benchmark baseline.
