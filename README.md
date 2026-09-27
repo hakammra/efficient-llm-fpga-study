@@ -1,6 +1,6 @@
 # Efficient LLM Inference and FPGA MAC Accelerator Study
 
-Status: **Benchmark and comparative analysis complete; MAC RTL and testbench written, simulation pending**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. This is an incremental learning and engineering study, not a complete LLM accelerator.
+Status: **CPU benchmark, comparative analysis, and HDL simulation complete**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. A signed INT8 MAC and a four-term dot product passed self-checking simulation and generic synthesis on Ubuntu. This is an incremental learning and engineering study, not a complete LLM accelerator.
 
 ## 1. Project motivation
 
@@ -22,7 +22,7 @@ flowchart LR
     F --> G[FPGA-style simulation and synthesis]
 ```
 
-The CPU benchmark and HDL study are separate experiments connected by the arithmetic used in neural-network layers. The HDL design will **not** execute Qwen or directly implement Q4_K_M.
+The CPU benchmark and HDL study are separate experiments connected by the arithmetic used in neural-network layers. The HDL design does **not** execute Qwen or directly implement Q4_K_M.
 
 ## 4. LLM benchmark methodology
 
@@ -34,7 +34,7 @@ Quantization represents values using fewer bits, usually with a mapping between 
 
 ## 6. FPGA arithmetic experiment
 
-The hardware study has a signed INT8 MAC and self-checking SystemVerilog testbench. Windows Device Guard currently prevents the installed simulator from running, so functional verification remains pending. A four-lane dot product is planned next. Simulation can establish functional behavior once run; synthesis, if available, will report generic logic statistics, not physical DE0-Nano utilization or measured clock speed. No FPGA board is available. See [fpga/README.md](fpga/README.md).
+The hardware study implements a signed INT8 MAC and a four-term parallel dot product, each with a self-checking SystemVerilog testbench. Both simulations and generic Yosys synthesis completed in [this GitHub Actions run](https://github.com/hakammra/efficient-llm-fpga-study/actions/runs/36339039843). Windows Device Guard blocked the local Icarus executable, so the verification ran on Ubuntu. Generic synthesis is not a DE0-Nano/Cyclone IV utilization or timing report. No FPGA board was used. See [fpga/README.md](fpga/README.md).
 
 ## 7. Relationship between quantization and hardware acceleration
 
@@ -46,15 +46,23 @@ Test environment (recorded 2026-09-23): Windows x64 (build 26200), Intel Core i7
 
 ## 9. Results
 
-The benchmark dataset contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. Strict exact checks passed for FP16 9/17, Q8_0 8/17, and Q4_K_M 10/17; three summaries per variant await manual review. [The analysis script](analysis/analyze_results.py) generates [processed tables](results/processed/benchmark_summary.csv) and a [comparison figure](analysis/plots/benchmark_tradeoffs.png) from those records. These are exploratory observations, not a stable performance or broad model-quality ranking. Setup smoke tests remain separate from this batch.
+The benchmark dataset contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. [The analysis script](analysis/analyze_results.py) generates [processed tables](results/processed/benchmark_summary.csv) and a [comparison figure](analysis/plots/benchmark_tradeoffs.png) from those records.
+
+| Format | GGUF size (MiB) | Median generation (tokens/s) | Median whole process (s) | Strict exact checks |
+| --- | ---: | ---: | ---: | ---: |
+| FP16 | 1207.8 | 16.3 | 4.798 | 9/17 |
+| Q8_0 | 644.4 | 31.9 | 4.167 | 8/17 |
+| Q4_K_M | 468.6 | 34.2 | 4.216 | 10/17 |
+
+Q4_K_M occupies about 61% less disk space than FP16 and had about 2.1 times its median reported generation rate in this one pass. Its median whole-process duration was slightly longer than Q8_0's, illustrating that the token rate and total process duration measure different things. The strict exact-check counts do not establish a quality ranking: the prompt set is small, formatting failures count, and three summaries per format remain for manual review. Pilot and setup runs are separate from this batch. The HDL simulations passed their directed and pseudo-random checks, but there is no physical FPGA result.
 
 ## 10. Limitations
 
-One machine, one timing pass per prompt/model pair, a small prompt set, and a small 0.5B-parameter model limit generalization. Strict exact checks include formatting requirements, and CPU timings can vary with system load and caching. Whole-process duration includes model loading; separate loading time, peak process RAM, time to first token, and model-only inference latency were not measured reliably. The MAC has not yet passed an HDL simulation on this machine because Device Guard blocks the installed Icarus executable. Future functional simulation will not establish FPGA timing, energy use, or physical resource use. No physical FPGA result is claimed.
+One machine, one timing pass per prompt/model pair, a small prompt set, and a small 0.5B-parameter model limit generalization. Strict exact checks include formatting requirements, and CPU timings can vary with system load and caching. Whole-process duration includes model loading; separate loading time, peak process RAM, time to first token, and model-only inference latency were not measured reliably. HDL simulation covers the exercised vectors but cannot establish FPGA timing, energy use, or physical resource use. Generic synthesis is not target-specific FPGA place-and-route. No physical FPGA result is claimed.
 
 ## 11. Future work
 
-Run the MAC testbench with an approved simulator, then implement the parallel dot product, integration, and interview notes. Additional numbered timing trials can be run if a stronger speed estimate is needed. See [PROGRESS.md](PROGRESS.md).
+For a stronger study, repeat CPU measurements in counterbalanced model order, measure peak RAM, loading time, and time to first token, and evaluate more prompts. For hardware, add fixed-point scaling/requantization, memory movement, and target-specific synthesis before making FPGA performance claims. See [PROGRESS.md](PROGRESS.md) and [interview notes](docs/interview_notes.md).
 
 ## Reproducing the baseline on Windows
 

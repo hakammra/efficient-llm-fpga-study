@@ -1,5 +1,7 @@
 # Results
 
+The CPU benchmark artifacts are described below. HDL simulation and generic synthesis evidence is in [hardware/README.md](hardware/README.md).
+
 `raw/` holds direct outputs and per-run records; `processed/` holds derived summaries, exact-check failures, and responses for manual review. `analysis/analyze_results.py` generates these files and the plot from the measured batch. Keep units, runtime settings, and provenance next to measurements. The setup phase contains only Q4_K_M smoke-test outputs, not a comparison. `baseline_q4.txt` is the final one-word check. `baseline_q4_attempt1.txt` hit its output cap; `baseline_q4_attempt2.txt` contains an incorrect arithmetic answer. They are preserved to make the exploratory process visible.
 
 The initial Q4_K_M `math_01` pilot has a full CLI stdout transcript and a structured JSON record. Its whole-process time includes program startup and model loading. The CLI-reported prompt and generation rates are single-run observations. Neither this pilot nor the setup checks are three-model benchmark results.

@@ -1,8 +1,12 @@
-# Signed INT8 MAC study
+# Signed INT8 arithmetic study
 
 `rtl/mac_int8.sv` describes a clocked multiply-accumulate unit. When `valid_in` is high at a rising clock edge, it computes `accumulator <- accumulator + a*b` and raises `valid_out` for that accepted operation. `clear` sets the sum to zero and takes priority over `valid_in`; active-low `rst_n` resets the state asynchronously. When neither `clear` nor `valid_in` is active, the sum holds.
 
-The operands are signed 8-bit two's-complement numbers in `[-128, 127]`. Their product needs 16 signed bits. The 16-bit product is explicitly sign-extended into the 32-bit accumulator. A 32-bit accumulator can still overflow after enough operations; this design uses two's-complement wraparound, not saturation. For example, repeated `127*127` additions eventually exceed its range. This is an arithmetic demonstration, not a Qwen or Q4_K_M implementation.
+The operands are signed 8-bit two's-complement numbers in `[-128, 127]`. Their product needs 16 signed bits. The 16-bit product is explicitly sign-extended into the 32-bit accumulator. A 32-bit accumulator can still overflow after enough operations; this design uses two's-complement wraparound, not saturation. For example, repeated `127*127` additions eventually exceed its range.
+
+`rtl/dot_product_int8.sv` computes `a0*w0 + a1*w1 + a2*w2 + a3*w3`. Four multipliers operate in parallel; two pairwise sums feed a final sum, which is captured on a rising clock edge when `valid_in` is high. The output holds otherwise. Its maximum is `4*(-128)*(-128) = 65536`; its minimum is `4*(-128)*127 = -65024`. An 18-bit signed output covers both limits; 17 bits would not cover the maximum. Parallel arithmetic offers one accepted four-term vector per clock edge if timing is met, but no clock-frequency or physical throughput measurement exists.
+
+These circuits demonstrate arithmetic, not Qwen or Q4_K_M execution. They do not load GGUF weights, perform scaling or requantization, or implement a transformer.
 
 ## Software and Command Prompt steps
 
@@ -20,10 +24,15 @@ set "PATH=C:\msys64\ucrt64\bin;%PATH%"
 where iverilog
 iverilog -V
 fpga\scripts\run_mac.cmd
+fpga\scripts\run_dot_product.cmd
 ```
 
-The script compiles with `iverilog -g2012`, runs with `vvp`, and writes `fpga\waveforms\mac_int8.vcd`. A successful run should print `PASS: 510 MAC cases plus reset checks`. Open the VCD in GTKWave, if available, to inspect `a`, `b`, `product`, `accumulator`, `valid_in`, `valid_out`, and `clear`. The waveform and simulator build products are ignored by Git.
+The scripts compile with `iverilog -g2012`, run with `vvp`, and write VCD waveforms under `fpga\waveforms\`. The MAC testbench checks 510 cases plus reset. The dot-product testbench checks 507 cases plus reset. Open the VCD files in GTKWave, if available, to inspect operands, products, sums, `valid_in`, and `valid_out`. Waveforms and simulator build products are ignored by Git.
 
-The testbench checks directed positive, negative, zero, and signed-boundary cases, clear and hold behavior, 500 reproducible pseudo-random pairs, and reset. It uses a separate integer reference and stops with `$fatal` on any mismatch. A passing simulation demonstrates functional agreement on those vectors; it does not establish FPGA timing, area, power, or board operation.
+Each testbench checks directed positive, negative, zero, and signed-boundary cases, 500 reproducible pseudo-random vectors, and reset. The MAC also tests clear and hold; the dot product tests hold. Separate integer references calculate expected answers and `$fatal` stops on a mismatch. Passing simulation demonstrates functional agreement on those vectors; it does not establish FPGA timing, area, power, or board operation.
 
-**Verification status:** Icarus Verilog was installed through MSYS2 on the development machine, but Windows Device Guard blocked `iverilog.exe` when invoked. The simulation has therefore **not run successfully on this machine**, and no passing result or waveform is claimed. An approved simulator installation or a machine that permits Icarus is needed to complete runtime verification. `where iverilog` confirms a path only; `iverilog -V` confirms whether the executable can actually start.
+## Verification and synthesis evidence
+
+Windows Device Guard blocked the local MSYS2 `iverilog.exe`. The same checked-in sources were instead compiled and simulated by the [successful Ubuntu GitHub Actions run](https://github.com/hakammra/efficient-llm-fpga-study/actions/runs/36339039843). Its simulation, generic Yosys synthesis, and artifact-upload steps all completed successfully. The run artifact contains test logs, synthesis logs, and VCD waveforms. The shell commands are in `scripts/run_simulations.sh` and `scripts/run_synthesis.sh`; the workflow is `.github/workflows/hdl.yml`. See [hardware evidence](../results/hardware/README.md).
+
+Yosys synthesized generic RTL on a GitHub-hosted Linux machine. This is not a Cyclone IV target mapping: no DE0-Nano resources, achievable FPGA clock frequency, power, or energy were measured. No physical FPGA board was used.
