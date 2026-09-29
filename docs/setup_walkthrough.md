@@ -15,7 +15,7 @@ The pinned program is build `b10938-f1e44dcc1`. The Qwen file is 491,400,032 byt
 
 ## Choose your terminal
 
-**Command Prompt (CMD)** is the Windows terminal that uses backslashes in paths and double quotes around a prompt with spaces. **Git Bash** is a Bash-like terminal installed with Git for Windows; it uses forward slashes. It is not an FPGA tool or a Linux installation. **PowerShell** is a third Windows shell; the initial setup commands were run there and are in [llm/README.md](../llm/README.md). The program and model are the same in all three shells.
+**Command Prompt (CMD)** is the Windows terminal that uses backslashes in paths and double quotes around a prompt with spaces. **Git Bash** is a Bash-like terminal installed with Git for Windows; it uses forward slashes. It is not a Linux installation. **PowerShell** is a third Windows shell; the initial setup commands were run there and are in [llm/README.md](../llm/README.md). The program and model are the same in all three shells.
 
 ### Command Prompt: reproduce from a clean copy
 
@@ -103,5 +103,5 @@ You should be able to answer these follow-ups in your own words:
 - **Why two downloads?** The executable performs inference; the GGUF supplies model weights and tokenizer metadata.
 - **Why check SHA256?** It checks that the local file has the expected bytes. It does not by itself prove a model's quality.
 - **Why CPU-only?** It keeps the planned comparisons on the same accessible backend and avoids GPU setup differences.
-- **What is Q4_K_M?** A specific blockwise quantized GGUF weight format; it is not the same thing as the planned plain INT8 MAC circuit.
+- **What is Q4_K_M?** A specific blockwise quantized GGUF weight format with scales and metadata; the label does not mean every model parameter occupies exactly four bits.
 - **Why keep an incorrect answer?** A working inference system can still answer incorrectly, so objective prompts need answer checks and raw outputs must be preserved.

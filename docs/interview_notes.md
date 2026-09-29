@@ -1,47 +1,31 @@
-# Interview notes
+# How to explain the quantization study
 
-## A 30-second explanation
+## A short explanation
 
-"I built a small reproducible study linking LLM quantization to digital arithmetic. I ran the same 20 prompts on FP16, Q8_0, and Q4_K_M versions of Qwen2.5-0.5B-Instruct with llama.cpp on one CPU, preserved every response, and generated plots from audited records. Then I implemented a signed INT8 MAC and a four-term parallel dot product in SystemVerilog, verified both with self-checking simulations, and ran generic synthesis. The HDL is an arithmetic demonstration; it does not run Qwen on an FPGA."
+"I compared FP16, Q8_0, and Q4_K_M versions of the same Qwen2.5-0.5B-Instruct model on one CPU. I used the same 20 prompts and fixed `llama.cpp` settings, saved all 60 responses and timings, and audited the records. Q4_K_M had the smallest file and the highest reported generation rate in this one pass. The prompt set and single run per prompt are too limited to rank answer quality or make a general speed claim."
 
-## A two-minute explanation
+## If asked for numbers
 
-"My question was how precision affects storage, observed CPU speed, and answers for one small model, and how lower-precision arithmetic connects to hardware. I used three official GGUF variants of the same Qwen model and the same 20-prompt set. All 60 CPU runs used four threads, no GPU layers, a 2048-token context, a 96-token output cap, temperature zero, and seed 42. I saved the full model outputs and structured timings, then audited all 60 records against the transcripts and prompt keys."
+| Format | File size | Median generation rate | Median whole-process time | Strict exact matches |
+| --- | ---: | ---: | ---: | ---: |
+| FP16 | 1207.8 MiB | 16.3 tokens/s | 4.798 s | 9/17 |
+| Q8_0 | 644.4 MiB | 31.9 tokens/s | 4.167 s | 8/17 |
+| Q4_K_M | 468.6 MiB | 34.2 tokens/s | 4.216 s | 10/17 |
 
-"The FP16 file is 1207.8 MiB, Q8_0 is 644.4 MiB, and Q4_K_M is 468.6 MiB. Median reported generation rates were 16.3, 31.9, and 34.2 tokens per second respectively. Median whole-process durations were 4.798, 4.167, and 4.216 seconds. Q4_K_M is much smaller and showed a higher generation rate in this pass, but the total duration does not rank the same way. The prompt set and one run per pair are too small for a broad quality or stable speed claim. Strict exact checks were 9, 8, and 10 passes out of 17; these include formatting, and the three summaries per format remain unscored."
+The remaining three prompts per format were summaries left for manual review. Strict matching includes formatting, so these counts are not general model-accuracy scores.
 
-"On the hardware side, I designed a clocked signed INT8 MAC with a 16-bit product and 32-bit accumulator, then a four-multiplier dot product with an 18-bit signed sum. Both passed directed and pseudo-random self-checking simulations on an Ubuntu runner; Yosys also completed generic synthesis. I have not measured a physical FPGA. Q4_K_M's blockwise GGUF format is not directly implemented by the INT8 RTL. The common idea is sums of products in neural-network layers."
+## Likely follow-up questions
 
-## If asked about your familiarity
+**Why use the same model and prompts?** To reduce differences caused by model architecture or task selection. The formats can still use different storage layouts and backend kernels, so this is a comparison of whole software configurations.
 
-- **FPGAs:** "I have introductory exposure from a DE0-Nano UART university project. I understand clocked RTL, simulation, testbenches, and basic FPGA resources. For this study I built and verified MAC and dot-product RTL; I have not yet done board-level implementation or timing closure for it."
-- **LLMs:** "I understand inference at a practical introductory level: tokenization, transformer layers, attention, weights, and generation. I used Qwen GGUF variants through llama.cpp and built a controlled benchmark. I have not trained or designed an LLM."
+**What is quantization?** It stores approximate weights with lower precision and scale information. A smaller model can reduce disk storage and sometimes memory traffic, but may alter outputs. Speed depends on the CPU backend and workload.
 
-## Technical questions to be ready for
+**Does Q4_K_M mean every parameter occupies four bits?** No. It is a blockwise GGUF quantization format with scales, metadata, and potentially different formats across tensors. Compare the actual file sizes.
 
-**Why use the same model family and prompts?** To reduce confounding from architecture and task differences. The formats still differ in storage representation and potentially backend kernels, so the result is a system-level comparison.
+**Why can the fastest generation rate differ from the shortest whole-process time?** Whole-process time includes program startup, model loading, prompt processing, and answer generation. Reported generation tokens per second describes only one phase.
 
-**Does Q4_K_M mean every parameter occupies four bits?** No. It is a blockwise GGUF quantization format with scales, metadata, and some tensors possibly stored differently. Compare actual file sizes rather than multiplying parameter count by four bits.
+**What are the main limitations?** One computer, one run per prompt/model pair, fixed run order, a small prompt set, and strict formatting-sensitive checks. Peak RAM, separate load time, time to first token, and energy were not measured.
 
-**What is the difference between generation rate and whole-process time?** The former is llama.cpp's reported output-token rate; the latter measures process startup, model loading, prompt processing, and answer generation together. A higher generation rate need not yield the shortest total duration.
+## Useful next experiment
 
-**What does 10/17 mean?** Ten responses matched the expected strings exactly. It is not an overall accuracy score: formatting mistakes count as failures, the set is small, and subjective summaries were left for manual review.
-
-**Why a 16-bit product and 18-bit dot-product result?** Signed INT8 ranges from -128 to 127. One product reaches 16384, fitting signed 16 bits. Four such positive products reach 65536, one above signed 17-bit maximum 65535, so the four-term sum needs 18 signed bits.
-
-**What does the MAC accumulator do?** On an accepted rising edge it adds a sign-extended product to a 32-bit signed register. Clear wins over valid input; reset is active-low. The 32-bit sum wraps on overflow rather than saturating.
-
-**What was verified?** The testbenches compared RTL outputs with independent integer references over directed boundaries, zero, sign combinations, reset/hold behavior, and 500 reproducible pseudo-random vectors per module. GitHub Actions reported both simulations and generic Yosys synthesis successful. These are functional and generic-logic checks, not physical FPGA measurements.
-
-**How does this relate to LLM inference?** Matrix-vector and matrix-matrix operations contain many multiply-accumulate sums. Reduced precision can lower storage and change arithmetic costs. A real accelerator also needs format-specific dequantization or requantization, data movement, memory hierarchy, control, and target-specific timing and power analysis; none of those are implemented here.
-
-## Questions to ask a researcher
-
-1. Which current problem in efficient LLM inference or EDA would be useful for an undergraduate to reproduce or prototype?
-2. Would a focused next step be more valuable on the measurement side (repeatable latency, memory, and quality evaluation) or hardware side (a target-specific quantized dot-product kernel)?
-3. What target platform, model format, and evaluation metric would make a small collaboration result meaningful?
-4. Which background topic should I study first to contribute effectively: quantization mathematics, FPGA memory/dataflow, timing closure, or LLM inference software?
-
-## A realistic next experiment
-
-Repeat CPU runs with counterbalanced model order and measure peak process RAM, loading time, time to first token, and output-token count. In parallel, choose a specific quantized matrix-vector kernel, define scale and accumulator semantics, and synthesize it for a named FPGA target. Compare correctness and target reports before making performance claims. Ask the researcher which of these directions best matches their group's work.
+Repeat the CPU runs in a counterbalanced model order and measure peak process RAM, loading time, time to first token, and output-token count. Add more prompts and a carefully defined manual review protocol before making stronger quality claims.

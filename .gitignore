@@ -8,13 +8,6 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 
-# Generated simulator and synthesis output
-*.vcd
-*.fst
-fpga/build/
-fpga/waveforms/*
-!fpga/waveforms/.gitkeep
-
 # Editor and operating-system files
 .vscode/
 .idea/

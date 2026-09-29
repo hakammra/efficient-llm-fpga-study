@@ -8,4 +8,4 @@
 - **Autoregressive inference:** The model predicts one next token, appends it to the context, and repeats. Prompt processing reads the existing context; generation then produces tokens sequentially.
 - **Parameter:** One learned value in the model, usually a weight. `0.5B` means roughly half a billion parameters, not a file size.
 
-In many transformer components, vectors are multiplied by weight matrices. Each output element is a sum of products. That arithmetic motivates the later MAC and dot-product study, though the HDL here is far too small to execute the model.
+In many transformer components, vectors are multiplied by weight matrices. Each output element is a sum of products. The CPU backend performs these operations while evaluating the model.

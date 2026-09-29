@@ -1,77 +1,35 @@
-# Efficient LLM Inference and FPGA MAC Accelerator Study
+# Qwen2.5 Quantization Benchmark
 
-Status: **CPU benchmark, comparative analysis, and HDL simulation complete**. The shared prompt set and three model variants have completed one audited 60-run CPU benchmark pass. A signed INT8 MAC and a four-term dot product passed self-checking simulation and generic synthesis on Ubuntu. This is an incremental learning and engineering study, not a complete LLM accelerator.
+A small, reproducible CPU inference study comparing three GGUF formats of the same Qwen2.5-0.5B-Instruct model: FP16, Q8_0, and Q4_K_M.
 
-## 1. Project motivation
+**Status:** One complete, audited benchmark pass: 20 common prompts per format, 60 saved runs in total. This is an exploratory comparison on one computer, not a general ranking of model quality or speed.
 
-Large language model inference repeatedly performs arithmetic on many weights. Reduced precision may lower storage and data movement costs. This project connects a small, reproducible quantization experiment to a simulated FPGA-style arithmetic design.
+## Question and method
 
-## 2. Research question
+How do the three formats compare in **model file size**, **observed CPU timing**, and **responses** to a small common prompt set?
 
-For the same Qwen2.5-0.5B-Instruct model on one CPU system, how do FP16, Q8_0, and Q4_K_M compare in file size, memory, speed, latency, and responses to a small common prompt set? How does signed INT8 multiply-accumulate arithmetic illustrate one building block of quantized neural-network computation?
+All runs used the same `llama.cpp` CPU build, four threads, zero GPU layers, a 2048-token context, a 96-token output cap, temperature zero, and seed 42. Raw terminal transcripts and structured records are saved under [`results/raw/`](results/raw/). The [audit script](llm/audit_results.py) checked all 60 records against their transcripts and prompt keys. The [analysis script](analysis/analyze_results.py) produces the [summary table](results/processed/benchmark_summary.csv) and [comparison plot](analysis/plots/benchmark_tradeoffs.png).
 
-## 3. System overview
+The [prompt set](benchmarks/prompts.json) covers mathematics, factual questions, basic reasoning, instruction following, programming, and summarization. Seventeen prompts per format have strict exact-answer checks; three summaries per format remain for manual review. See the [benchmark guide](benchmarks/README.md) and [results guide](results/README.md).
 
-```mermaid
-flowchart LR
-    A[Qwen2.5-0.5B-Instruct] --> B[GGUF precision variants]
-    B --> C[CPU inference with llama.cpp]
-    B --> D[Low-precision arithmetic concept]
-    D --> E[Signed INT8 MAC]
-    E --> F[Parallel dot products]
-    F --> G[FPGA-style simulation and synthesis]
-```
+## Results
 
-The CPU benchmark and HDL study are separate experiments connected by the arithmetic used in neural-network layers. The HDL design does **not** execute Qwen or directly implement Q4_K_M.
-
-## 4. LLM benchmark methodology
-
-The benchmark used the same prompt set, model family, backend, CPU-only configuration, thread count, context length, and generation settings for all three variants. Raw responses and structured measurements were retained. Objective questions have simple checkable answers; summaries are kept for manual review. This is an **exploratory quality and efficiency comparison**, not a rigorous model-intelligence evaluation. See [llm/README.md](llm/README.md) and [benchmarks/README.md](benchmarks/README.md).
-
-## 5. Quantization explanation
-
-Quantization represents values using fewer bits, usually with a mapping between stored integers and approximate real values. FP16 uses a 16-bit floating-point format; Q8_0 and Q4_K_M are GGUF weight-quantization formats. Their labels do not mean every byte in the file is exactly 8 or 4 bits per parameter. See [docs/quantization.md](docs/quantization.md).
-
-## 6. FPGA arithmetic experiment
-
-The hardware study implements a signed INT8 MAC and a four-term parallel dot product, each with a self-checking SystemVerilog testbench. Both simulations and generic Yosys synthesis completed in [this GitHub Actions run](https://github.com/hakammra/efficient-llm-fpga-study/actions/runs/36339039843). Windows Device Guard blocked the local Icarus executable, so the verification ran on Ubuntu. Generic synthesis is not a DE0-Nano/Cyclone IV utilization or timing report. No FPGA board was used. See [fpga/README.md](fpga/README.md).
-
-## 7. Relationship between quantization and hardware acceleration
-
-Many neural-network layers compute sums of products, `y = Σ(wᵢ × xᵢ)`. A MAC adds one product to an accumulator; a dot product sums several products. Lower precision can reduce model storage and memory bandwidth, and can permit smaller arithmetic units and more parallel operations. Actual energy, speed, and area depend on the implementation and must be measured or synthesized. Q4_K_M uses blockwise quantization and is **not** mapped directly to this simple INT8 datapath. The HDL is a conceptual learning bridge, not Qwen inference hardware.
-
-## 8. Experimental setup
-
-Test environment (recorded 2026-09-23): Windows x64 (build 26200), Intel Core i7-8650U, 8 logical processors, 15.92 GiB physical RAM, Python 3.14.7, Git 2.55.0.windows.5. `winget` is unavailable here, so the baseline uses the official `llama.cpp` Windows x64 CPU release **b10938** (commit `f1e44dcc1`). Model files come from the [official Qwen GGUF repository](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/tree/main). Exact baseline command and verification are in [llm/README.md](llm/README.md).
-
-## 9. Results
-
-The benchmark dataset contains 60 CPU runs: 20 common prompts for each of FP16, Q8_0, and Q4_K_M. [The audit](llm/audit_results.py) found 60/60 records consistent with their raw transcripts and fixed settings. [The analysis script](analysis/analyze_results.py) generates [processed tables](results/processed/benchmark_summary.csv) and a [comparison figure](analysis/plots/benchmark_tradeoffs.png) from those records.
-
-| Format | GGUF size (MiB) | Median generation (tokens/s) | Median whole process (s) | Strict exact checks |
+| Format | GGUF file size (MiB) | Median reported generation (tokens/s) | Median whole process (s) | Strict exact checks |
 | --- | ---: | ---: | ---: | ---: |
 | FP16 | 1207.8 | 16.3 | 4.798 | 9/17 |
 | Q8_0 | 644.4 | 31.9 | 4.167 | 8/17 |
 | Q4_K_M | 468.6 | 34.2 | 4.216 | 10/17 |
 
-Q4_K_M occupies about 61% less disk space than FP16 and had about 2.1 times its median reported generation rate in this one pass. Its median whole-process duration was slightly longer than Q8_0's, illustrating that the token rate and total process duration measure different things. The strict exact-check counts do not establish a quality ranking: the prompt set is small, formatting failures count, and three summaries per format remain for manual review. Pilot and setup runs are separate from this batch. The HDL simulations passed their directed and pseudo-random checks, but there is no physical FPGA result.
+**Main observation:** Q4_K_M used about 61% less disk space than FP16 and had about 2.1 times its median reported generation rate in this pass. Q8_0 had the shortest median whole-process duration, but its 0.049-second difference from Q4_K_M is too small to treat as a reliable win. The exact-check counts do **not** establish an answer-quality ranking: the set is small, formatting differences count as failures, and summaries are unscored.
 
-## 10. Limitations
+The file sizes are **disk sizes**, not measured peak RAM. Whole-process time includes startup, model loading, prompt processing, and generation; it is different from generation tokens per second. Each prompt/model pair was run once in a fixed order on one CPU, so repeated, counterbalanced trials are needed for stronger speed claims. Peak RAM, separate loading time, time to first token, and energy were not measured.
 
-One machine, one timing pass per prompt/model pair, a small prompt set, and a small 0.5B-parameter model limit generalization. Strict exact checks include formatting requirements, and CPU timings can vary with system load and caching. Whole-process duration includes model loading; separate loading time, peak process RAM, time to first token, and model-only inference latency were not measured reliably. HDL simulation covers the exercised vectors but cannot establish FPGA timing, energy use, or physical resource use. Generic synthesis is not target-specific FPGA place-and-route. No physical FPGA result is claimed.
+## Reproduce and learn
 
-## 11. Future work
+- [Setup walkthrough for Command Prompt and Git Bash](docs/setup_walkthrough.md)
+- [LLM runner and audit instructions](llm/README.md)
+- [Analysis and plot instructions](analysis/README.md)
+- [Quantization basics](docs/quantization.md) and [LLM basics](docs/llm_basics.md)
+- [Progress and provenance](PROGRESS.md) and [meeting explanation](docs/interview_notes.md)
 
-For a stronger study, repeat CPU measurements in counterbalanced model order, measure peak RAM, loading time, and time to first token, and evaluate more prompts. For hardware, add fixed-point scaling/requantization, memory movement, and target-specific synthesis before making FPGA performance claims. See [PROGRESS.md](PROGRESS.md) and [interview notes](docs/interview_notes.md).
-
-## Reproducing the baseline on Windows
-
-From PowerShell in the repository root, follow [llm/README.md](llm/README.md). The downloaded release and GGUF belong in `.local/`, which Git ignores. No CUDA setup is needed.
-
-For an interview-ready explanation and CMD/Git Bash commands, follow the [setup walkthrough](docs/setup_walkthrough.md).
-
-## Sources and licenses
-
-- [Qwen2.5-0.5B-Instruct-GGUF model repository](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF) (model license: Apache-2.0)
-- [llama.cpp installation guide](https://github.com/ggml-org/llama.cpp/blob/master/docs/install.md) and [release b10938](https://github.com/ggml-org/llama.cpp/releases/tag/b10938)
-- This repository's original code and documentation: MIT license (see `LICENSE`). Model and backend licenses remain their own.
+The model files and `llama.cpp` executable belong under Git-ignored `.local/`; they are not part of the repository. The baseline used the official [Qwen GGUF files](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF) and [`llama.cpp` release b10938](https://github.com/ggml-org/llama.cpp/releases/tag/b10938). See [LICENSE](LICENSE) for this repository's code and documentation; the model and backend retain their own licenses.

@@ -3,18 +3,18 @@
 ## Goals
 
 - Create the local Git repository and documentation skeleton.
-- Inspect Python, Git, `llama.cpp`, WinGet, GitHub CLI, and planned FPGA tools.
+- Inspect Python, Git, `llama.cpp`, WinGet, and GitHub CLI.
 - Verify one official Qwen2.5-0.5B-Instruct Q4_K_M CPU inference run.
 - Learn the basic LLM and quantization vocabulary.
 
 ## Work completed
 
 - Initialized `main` as a local Git repository.
-- Created the README and documentation skeleton with separate measured, simulated, and conceptual claims.
+- Created the README and documentation skeleton with measured and conceptual claims kept distinct.
 - Verified Python 3.14.7 and Git 2.55.0.windows.5.
 - Downloaded the official `llama.cpp` Windows x64 CPU release b10938 and ran `llama-cli --version`: build `b10938-f1e44dcc1`.
 - Downloaded the official Qwen Q4_K_M GGUF (491,400,032 bytes), verified its SHA256, and ran three short local CPU inference checks. The final one-word check returned `Paris` and exited with code 0.
-- Wrote introductory notes for tokens, tokenization, embeddings, transformers, attention, autoregressive inference, quantization, and FPGA arithmetic.
+- Wrote introductory notes for tokens, tokenization, embeddings, transformers, attention, autoregressive inference, and quantization.
 - Added a [command-by-command setup walkthrough](../docs/setup_walkthrough.md) for Command Prompt and Git Bash. Verified `llama-cli --version`, model hash calculation, and the same inference command in both shells; both inference checks returned `Paris` with exit code 0.
 
 ## What I learned
@@ -34,7 +34,7 @@
 
 ## Problems encountered
 
-- `winget`, `gh`, `llama.cpp`, CMake, Icarus Verilog, and Yosys were not on `PATH` initially. WinGet was unavailable, so the pinned official CPU ZIP was used.
+- `winget`, `gh`, and `llama.cpp` were not on `PATH` initially. WinGet was unavailable, so the pinned official CPU ZIP was used.
 - The GitHub `releases/latest` endpoint identified a package release without Windows binaries. The numbered b10938 release supplied the needed CPU binary.
 - Initial WMI queries for machine information were denied; CPU information came from the Windows registry and RAM from the .NET `ComputerInfo` API.
 - This Git Bash installation has no `sha256sum`; Windows `certutil.exe` calculated the expected SHA256 from both Command Prompt and Git Bash.
@@ -42,10 +42,9 @@
 
 ## Decisions made
 
-- Keep executables, model weights, caches, and generated waveforms out of Git via `.gitignore`.
+- Keep executables, model weights, and caches out of Git via `.gitignore`.
 - Use the official Qwen GGUF repository for all future variants and pin/record hashes and backend version.
 - Keep the comparative benchmark separate from setup smoke tests; do not use these prompt rates as benchmark evidence.
-- Keep the FPGA design vendor-independent and label simulation and generic synthesis honestly.
 
 ## Follow-up
 
